@@ -1,0 +1,6 @@
+---
+- name: Deploy WordPress App to GCP
+  hosts: gcp
+  become: true
+  roles:
+    - deploy
