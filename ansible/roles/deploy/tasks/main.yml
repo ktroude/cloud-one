@@ -56,11 +56,34 @@
   become: true
 
 - name: Add user to docker group
-  become: true
   user:
     name: "{{ ansible_user }}"
     groups: docker
     append: yes
+  become: true
+
+- name: Install UFW
+  apt:
+    name: ufw
+    state: present
+    update_cache: yes
+  become: true
+
+- name: Enable UFW with default deny policy
+  ufw:
+    state: enabled
+    policy: deny
+  become: true
+
+- name: Allow SSH and HTTP/HTTPS
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+  loop:
+    - 22
+    - 80
+    - 443
+  become: true
 
 - name: Create app deployment directory
   file:

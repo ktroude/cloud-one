@@ -12,25 +12,25 @@ services:
       - inception
     volumes:
       - ./requirements/nginx/conf/:/etc/nginx/conf.d/
-      - wp-volume:/var/www/
+      - ./requirements/nginx/ssl/:/etc/nginx/ssl/
+      - ./data/wordpress:/var/www/
     restart: always
 
   mariadb:
-    environment:
-      DB_NAME: ${DB_NAME}
-      DB_USER: ${DB_USER}
-      DB_PASS: ${DB_PASS}
-      DB_ROOT: ${DB_ROOT}
+    container_name: mariadb
     build:
-      context: .
+      context: ./requirements/mariadb
+      dockerfile: Dockerfile
       args:
         DB_NAME: ${DB_NAME}
         DB_USER: ${DB_USER}
         DB_PASS: ${DB_PASS}
         DB_ROOT: ${DB_ROOT}
-      dockerfile: requirements/mariadb/Dockerfile
-
-    container_name: mariadb
+    environment:
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      DB_ROOT: ${DB_ROOT}
     ports:
       - "3306:3306"
     networks:
@@ -40,26 +40,24 @@ services:
       - db-volume:/var/lib/mysql
 
   wordpress:
-    environment:
-      DB_NAME: ${DB_NAME}
-      DB_USER: ${DB_USER}
-      DB_PASS: ${DB_PASS}
+    container_name: wordpress
     build:
-      context: .
+      context: ./requirements/wordpress
+      dockerfile: Dockerfile
       args:
         DB_NAME: ${DB_NAME}
         DB_USER: ${DB_USER}
         DB_PASS: ${DB_PASS}
         DB_ROOT: ${DB_ROOT}
-      dockerfile: requirements/wordpress/Dockerfile
-    container_name: wordpress
     depends_on:
       - mariadb
-    restart: always
+    environment:
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
     networks:
       - inception
-    volumes:
-      - wp-volume:/var/www/
+    restart: always
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -74,9 +72,8 @@ services:
       - inception
 
 volumes:
-  wp-volume:
   db-volume:
 
 networks:
-    inception:
-        driver: bridge
+  inception:
+    driver: bridge
