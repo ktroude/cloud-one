@@ -10,7 +10,7 @@ RUN openssl req -x509 -nodes -days 365 \
     -out /etc/nginx/ssl/selfsigned.crt \
     -subj "/CN=localhost"
 
-COPY conf/default.conf /etc/nginx/conf.d/default.conf
+COPY conf/nginx.conf /etc/nginx/conf.d/nginx.conf
 
 EXPOSE 443
 

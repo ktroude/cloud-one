@@ -1,8 +1,8 @@
 services:
   nginx:
     build:
-      context: .
-      dockerfile: requirements/nginx/Dockerfile
+      context: ./requirements/nginx
+      dockerfile: Dockerfile
     container_name: nginx
     depends_on:
       - wordpress
