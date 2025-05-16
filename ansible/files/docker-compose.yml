@@ -73,6 +73,7 @@
       environment:
         PMA_HOST: mariadb
         PMA_PORT: 3306
+        PMA_ABSOLUTE_URI: https://{{ inventory_hostname }}/phpmyadmin/
       networks:
         - inception
 
