@@ -13,7 +13,6 @@ services:
       - inception
     volumes:
       - /etc/nginx/ssl:/etc/nginx/ssl:ro
-      - ./conf:/etc/nginx/conf.d
       - wp-volume:/var/www/
     restart: always
 

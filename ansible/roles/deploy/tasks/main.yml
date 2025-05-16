@@ -149,7 +149,7 @@
     mode: '0644'
 
 - name: Run Docker Compose
-  command: docker compose up -d
+  command: docker compose up --build -d
   args:
     chdir: /home/bleotard/inception
   become: true
