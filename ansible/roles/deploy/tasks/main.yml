@@ -140,6 +140,15 @@
     creates: /etc/nginx/ssl/selfsigned.crt
   when: inventory_hostname in groups['gcp']
 
+- name: Ensure nginx conf directory exists
+  file:
+    path: /home/bleotard/inception/requirements/nginx/conf
+    state: directory
+    mode: '0755'
+    owner: bleotard
+    group: bleotard
+  become: true
+
 - name: Upload default.conf template with proper server_name
   template:
     src: default.conf.j2
@@ -147,6 +156,19 @@
     owner: bleotard
     group: bleotard
     mode: '0644'
+
+- name: Ensure local volume directories exist
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+    owner: bleotard
+    group: bleotard
+  with_items:
+    - /home/bleotard/data/mariadb
+    - /home/bleotard/data/wordpress
+  become: true
+
 
 - name: Run Docker Compose
   command: docker compose up --build -d
