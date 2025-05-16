@@ -12,8 +12,8 @@ services:
     networks:
       - inception
     volumes:
-      - ./requirements/nginx/conf/:/etc/nginx/conf.d/
-      - ./requirements/nginx/ssl/:/etc/nginx/ssl/
+      - /etc/nginx/ssl:/etc/nginx/ssl:ro
+      - ./conf:/etc/nginx/conf.d
       - wp-volume:/var/www/
     restart: always
 
@@ -33,8 +33,8 @@ services:
       dockerfile: requirements/mariadb/Dockerfile
 
     container_name: mariadb
-    ports:
-      - "3306:3306"
+    expose:
+      - "3306"
     networks:
       - inception
     restart: always
@@ -55,6 +55,8 @@ services:
         DB_ROOT: ${DB_ROOT}
       dockerfile: requirements/wordpress/Dockerfile
     container_name: wordpress
+    expose:
+      - "9000"
     depends_on:
       - mariadb
     restart: always
