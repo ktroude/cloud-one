@@ -1,7 +1,12 @@
 ---
+
 - name: Deploy WordPress App to GCP
   hosts: gcp
   become: true
   roles:
+    - docker-init
+    - firewall-init
+    - directory-init
+    - dl-files
+    - nginx-init
     - deploy
-    # - debug

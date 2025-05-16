@@ -1,0 +1,39 @@
+---
+
+- name: Create SSL directory
+  file:
+    path: /etc/nginx/ssl
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Create app deployment directory
+  file:
+    path: /home/bleotard/inception
+    state: directory
+    mode: '0755'
+    owner: bleotard
+    group: bleotard
+  become: true
+
+- name: Ensure local volume directories exist
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+    owner: bleotard
+    group: bleotard
+  with_items:
+    - /home/bleotard/data/mariadb
+    - /home/bleotard/data/wordpress
+  become: true
+
+- name: Ensure nginx conf directory exists
+  file:
+    path: /home/bleotard/inception/requirements/nginx/conf
+    state: directory
+    mode: '0755'
+    owner: bleotard
+    group: bleotard
+  become: true
